@@ -1,0 +1,8 @@
+name = "listas-ia"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "listas-ia"
+database_id = "REEMPLAZAR_CON_EL_ID_DE_TU_BASE_D1"

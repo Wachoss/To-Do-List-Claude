@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis listas</title>
+<style>
+:root {
+  --bg: #f7f7f5; --card: #ffffff; --text: #202124; --muted: #5f6368; --border: #e0e0e0;
+  --accent: #f9ab00; --danger: #c5221f; --shadow: 0 1px 2px rgba(0,0,0,.08), 0 1px 6px rgba(0,0,0,.06);
+  --c-red: #faafa8; --c-orange: #f39f76; --c-yellow: #fff8b8; --c-green: #e2f6d3; --c-teal: #b4ddd3;
+  --c-blue: #d4e4ed; --c-purple: #d3bfdb; --c-pink: #f6e2dd; --c-brown: #e9e3d4; --c-gray: #efeff1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1f1f; --card: #2a2a2a; --text: #e8eaed; --muted: #9aa0a6; --border: #3c4043;
+    --shadow: 0 1px 2px rgba(0,0,0,.5);
+    --c-red: #77172e; --c-orange: #692b17; --c-yellow: #7c4a03; --c-green: #264d3b; --c-teal: #0c625d;
+    --c-blue: #256377; --c-purple: #472e5b; --c-pink: #6c394f; --c-brown: #4b443a; --c-gray: #232427;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 5; }
+header h1 { font-size: 20px; margin: 0; flex: 1; font-weight: 500; }
+header h1 span { color: var(--accent); }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; border-radius: 6px; padding: 4px 8px; }
+button:hover { background: rgba(127,127,127,.15); }
+input[type=text], input[type=password] { font: inherit; color: inherit; background: transparent; border: 0; outline: none; width: 100%; padding: 4px 0; }
+main { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.composer { max-width: 600px; margin: 0 auto 24px; background: var(--card); border-radius: 10px; box-shadow: var(--shadow); padding: 10px 14px; }
+.composer .title { font-weight: 600; }
+.composer textarea { width: 100%; font: inherit; color: inherit; background: transparent; border: 0; outline: none; resize: vertical; min-height: 60px; }
+.composer .row { display: flex; justify-content: flex-end; gap: 8px; }
+.section-label { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 8px 4px; }
+.grid { columns: 260px; column-gap: 16px; }
+.card { break-inside: avoid; margin-bottom: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px 6px; box-shadow: var(--shadow); }
+.card .head { display: flex; align-items: center; gap: 4px; }
+.card .head input { font-weight: 600; font-size: 16px; }
+.item { display: flex; align-items: flex-start; gap: 8px; padding: 2px 0; }
+.item input[type=checkbox] { margin-top: 7px; width: 16px; height: 16px; accent-color: var(--muted); flex: none; }
+.item input[type=text] { flex: 1; }
+.item.checked input[type=text] { text-decoration: line-through; color: var(--muted); }
+.item .del { visibility: hidden; color: var(--muted); padding: 2px 6px; }
+.item:hover .del, .item:focus-within .del { visibility: visible; }
+.add { display: flex; gap: 8px; align-items: center; color: var(--muted); padding: 2px 0; }
+.add span { width: 16px; text-align: center; flex: none; }
+.done-toggle { font-size: 13px; color: var(--muted); padding: 4px 0; margin-top: 4px; border-top: 1px solid var(--border); width: 100%; text-align: left; border-radius: 0; }
+.tools { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; opacity: .55; }
+.card:hover .tools, .card:focus-within .tools { opacity: 1; }
+.tools button { font-size: 13px; color: var(--muted); }
+.colors { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 0; }
+.dot { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border); padding: 0; }
+.dot.sel { outline: 2px solid var(--accent); }
+.empty { text-align: center; color: var(--muted); margin-top: 48px; }
+.login { max-width: 380px; margin: 80px auto; background: var(--card); padding: 24px; border-radius: 12px; box-shadow: var(--shadow); }
+.login input { border-bottom: 1px solid var(--border) !important; margin: 12px 0; }
+.login .err { color: var(--danger); font-size: 14px; min-height: 1.4em; }
+.primary { background: var(--accent); color: #202124; padding: 6px 14px; }
+.primary:hover { background: var(--accent); filter: brightness(.95); }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: #323232; color: #fff; padding: 10px 16px; border-radius: 8px; display: none; }
+[data-color=red] { background: var(--c-red); } [data-color=orange] { background: var(--c-orange); }
+[data-color=yellow] { background: var(--c-yellow); } [data-color=green] { background: var(--c-green); }
+[data-color=teal] { background: var(--c-teal); } [data-color=blue] { background: var(--c-blue); }
+[data-color=purple] { background: var(--c-purple); } [data-color=pink] { background: var(--c-pink); }
+[data-color=brown] { background: var(--c-brown); } [data-color=gray] { background: var(--c-gray); }
+.card[data-color]:not([data-color=default]) { border-color: transparent; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mis <span>listas</span></h1>
+  <button id="archBtn" title="Ver archivadas">Archivadas</button>
+  <button id="refreshBtn" title="Actualizar">⟳</button>
+  <button id="logoutBtn" title="Cerrar sesión">Salir</button>
+</header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+<script>
+const COLORS = ['default','red','orange','yellow','green','teal','blue','purple','pink','brown','gray'];
+const state = { lists: [], showArchived: false, openDone: {}, openColors: null };
+let token = '';
+try { token = localStorage.getItem('listas_token') || ''; } catch (e) {}
+const app = document.getElementById('app');
+
+function h(tag, attrs = {}, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (k === 'value') el.value = v;
+    else if (k === 'checked') el.checked = v;
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of children.flat(Infinity)) if (c != null) el.append(c.nodeType ? c : document.createTextNode(c));
+  return el;
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toast._t); toast._t = setTimeout(() => (t.style.display = 'none'), 3000);
+}
+
+async function api(method, path, body) {
+  const res = await fetch('/api' + path, {
+    method, headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (res.status === 401) { logout(); throw new Error('Token incorrecto'); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) { toast(data.error || 'Error'); throw new Error(data.error); }
+  return data;
+}
+
+async function load() {
+  if (!token) return renderLogin();
+  try {
+    state.lists = await api('GET', '/lists' + (state.showArchived ? '?archived=1' : ''));
+    render();
+  } catch (e) {}
+}
+
+function logout() {
+  token = '';
+  try { localStorage.removeItem('listas_token'); } catch (e) {}
+  renderLogin();
+}
+
+function renderLogin(err = '') {
+  const input = h('input', { type: 'password', placeholder: 'Token de acceso', autocomplete: 'current-password' });
+  const errEl = h('div', { class: 'err' }, err);
+  const go = async () => {
+    token = input.value.trim();
+    const res = await fetch('/api/lists', { headers: { Authorization: 'Bearer ' + token } });
+    if (res.status === 401) { errEl.textContent = 'Token incorrecto'; token = ''; return; }
+    try { localStorage.setItem('listas_token', token); } catch (e) {}
+    load();
+  };
+  input.addEventListener('keydown', (e) => e.key === 'Enter' && go());
+  app.replaceChildren(h('div', { class: 'login' },
+    h('h2', {}, 'Entrar'),
+    h('p', {}, 'Introduce el token de acceso que configuraste al desplegar la app.'),
+    input, errEl, h('button', { class: 'primary', onclick: go }, 'Entrar')));
+  input.focus();
+}
+
+function composer() {
+  const title = h('input', { type: 'text', class: 'title', placeholder: 'Título de la nueva lista' });
+  const items = h('textarea', { placeholder: 'Elementos (uno por línea)' });
+  const create = async () => {
+    const t = title.value.trim();
+    if (!t) { title.focus(); return; }
+    const list = items.value.split('\n').map((s) => s.trim()).filter(Boolean);
+    await api('POST', '/lists', { title: t, items: list });
+    load();
+  };
+  return h('div', { class: 'composer' }, title, items,
+    h('div', { class: 'row' }, h('button', { class: 'primary', onclick: create }, 'Crear lista')));
+}
+
+function itemRow(item) {
+  const text = h('input', { type: 'text', value: item.text });
+  const save = async () => {
+    const v = text.value.trim();
+    if (v && v !== item.text) { item.text = v; await api('PATCH', '/items/' + item.id, { text: v }); }
+    else text.value = item.text;
+  };
+  text.addEventListener('blur', save);
+  text.addEventListener('keydown', (e) => e.key === 'Enter' && text.blur());
+  return h('div', { class: 'item' + (item.checked ? ' checked' : '') },
+    h('input', { type: 'checkbox', checked: item.checked, 'aria-label': 'Hecho', onchange: async (e) => {
+      await api('PATCH', '/items/' + item.id, { checked: e.target.checked }); load(); } }),
+    text,
+    h('button', { class: 'del', title: 'Borrar', 'aria-label': 'Borrar elemento', onclick: async () => {
+      await api('DELETE', '/items/' + item.id); load(); } }, '✕'));
+}
+
+function card(list) {
+  const title = h('input', { type: 'text', value: list.title, 'aria-label': 'Título' });
+  title.addEventListener('blur', async () => {
+    const v = title.value.trim();
+    if (v && v !== list.title) { await api('PATCH', '/lists/' + list.id, { title: v }); list.title = v; }
+    else title.value = list.title;
+  });
+  title.addEventListener('keydown', (e) => e.key === 'Enter' && title.blur());
+
+  const pending = list.items.filter((i) => !i.checked);
+  const done = list.items.filter((i) => i.checked);
+  const addInput = h('input', { type: 'text', placeholder: 'Añadir elemento' });
+  addInput.addEventListener('keydown', async (e) => {
+    if (e.key !== 'Enter' || !addInput.value.trim()) return;
+    await api('POST', '/lists/' + list.id + '/items', { items: [addInput.value.trim()] });
+    state.refocus = list.id; load();
+  });
+  addInput.dataset.list = list.id;
+
+  const children = [
+    h('div', { class: 'head' }, title,
+      h('button', { title: list.pinned ? 'Desfijar' : 'Fijar', onclick: async () => {
+        await api('PATCH', '/lists/' + list.id, { pinned: !list.pinned }); load(); } }, list.pinned ? '📌' : '📍')),
+    pending.map(itemRow),
+    h('div', { class: 'add' }, h('span', {}, '+'), addInput),
+  ];
+  if (done.length) {
+    const open = !!state.openDone[list.id];
+    children.push(h('button', { class: 'done-toggle', onclick: () => { state.openDone[list.id] = !open; render(); } },
+      (open ? '▾ ' : '▸ ') + done.length + (done.length === 1 ? ' elemento marcado' : ' elementos marcados')));
+    if (open) children.push(done.map(itemRow));
+  }
+  if (state.openColors === list.id) {
+    children.push(h('div', { class: 'colors' }, COLORS.map((c) =>
+      h('button', { class: 'dot' + (c === list.color ? ' sel' : ''), 'data-color': c, title: c, 'aria-label': 'Color ' + c,
+        onclick: async () => { state.openColors = null; await api('PATCH', '/lists/' + list.id, { color: c }); load(); } }))));
+  }
+  children.push(h('div', { class: 'tools' },
+    h('button', { onclick: () => { state.openColors = state.openColors === list.id ? null : list.id; render(); } }, 'Color'),
+    done.length ? h('button', { onclick: async () => { await api('POST', '/lists/' + list.id + '/clear-checked'); load(); } }, 'Quitar marcados') : null,
+    h('button', { onclick: async () => { await api('PATCH', '/lists/' + list.id, { archived: !list.archived }); load(); } }, list.archived ? 'Desarchivar' : 'Archivar'),
+    h('button', { onclick: async () => {
+      if (!confirm('¿Borrar la lista "' + list.title + '"?')) return;
+      await api('DELETE', '/lists/' + list.id); load(); } }, 'Borrar')));
+  return h('div', { class: 'card', 'data-color': list.color }, children);
+}
+
+function render() {
+  const active = state.lists.filter((l) => !l.archived);
+  const pinned = active.filter((l) => l.pinned);
+  const others = active.filter((l) => !l.pinned);
+  const archived = state.lists.filter((l) => l.archived);
+  const parts = [composer()];
+  if (!state.lists.length) parts.push(h('p', { class: 'empty' }, 'Aún no hay listas. Crea una aquí o pídeselo a Claude.'));
+  if (pinned.length) parts.push(h('div', { class: 'section-label' }, 'Fijadas'), h('div', { class: 'grid' }, pinned.map(card)));
+  if (others.length) parts.push(pinned.length ? h('div', { class: 'section-label' }, 'Otras') : null, h('div', { class: 'grid' }, others.map(card)));
+  if (state.showArchived && archived.length) parts.push(h('div', { class: 'section-label' }, 'Archivadas'), h('div', { class: 'grid' }, archived.map(card)));
+  app.replaceChildren(...parts.filter(Boolean));
+  document.getElementById('archBtn').textContent = state.showArchived ? 'Ocultar archivadas' : 'Archivadas';
+  if (state.refocus) {
+    const el = app.querySelector('input[data-list="' + state.refocus + '"]');
+    if (el) el.focus();
+    state.refocus = null;
+  }
+}
+
+document.getElementById('archBtn').onclick = () => { state.showArchived = !state.showArchived; load(); };
+document.getElementById('refreshBtn').onclick = load;
+document.getElementById('logoutBtn').onclick = logout;
+// Refresca solo cuando la pestaña vuelve a estar visible o cada 20 s si no estás escribiendo.
+document.addEventListener('visibilitychange', () => !document.hidden && token && load());
+setInterval(() => {
+  const a = document.activeElement;
+  if (token && !document.hidden && !(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA'))) load();
+}, 20000);
+load();
+</script>
+</body>
+</html>

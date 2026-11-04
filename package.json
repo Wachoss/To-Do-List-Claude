@@ -1,0 +1,15 @@
+{
+  "name": "listas-ia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Listas de tareas estilo Keep con conector MCP para Claude",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute listas-ia --remote --file=schema.sql",
+    "db:init:local": "wrangler d1 execute listas-ia --local --file=schema.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
