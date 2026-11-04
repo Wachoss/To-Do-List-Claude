@@ -1,6 +1,31 @@
 import * as store from './store.js';
 import { handleMcp } from './mcp.js';
 import UI_HTML from './ui.html';
+import ICON_SVG from './assets/icon.svg';
+import MANIFEST from './assets/manifest.webmanifest';
+import ICON_180 from './assets/icon-180.png';
+import ICON_192 from './assets/icon-192.png';
+import ICON_512 from './assets/icon-512.png';
+
+const STATIC = {
+  '/manifest.webmanifest': [MANIFEST, 'application/manifest+json'],
+  '/icon.svg': [ICON_SVG, 'image/svg+xml'],
+  '/icon-180.png': [ICON_180, 'image/png'],
+  '/apple-touch-icon.png': [ICON_180, 'image/png'],
+  '/icon-192.png': [ICON_192, 'image/png'],
+  '/icon-512.png': [ICON_512, 'image/png'],
+};
+
+const CSP = [
+  "default-src 'self'",
+  "script-src 'unsafe-inline'",
+  "style-src 'unsafe-inline' https://fonts.googleapis.com",
+  'font-src https://fonts.gstatic.com',
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "manifest-src 'self'",
+  "frame-ancestors 'none'",
+].join('; ');
 
 function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string') return false;
@@ -85,12 +110,17 @@ export default {
       return new Response(UI_HTML, {
         headers: {
           'Content-Type': 'text/html; charset=utf-8',
-          'Content-Security-Policy': "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'",
+          'Content-Security-Policy': CSP,
           'X-Frame-Options': 'DENY',
+          'Cache-Control': 'no-cache',
         },
       });
     }
-    if (path === '/favicon.ico') return new Response(null, { status: 204 });
+    if (STATIC[path]) {
+      const [body, type] = STATIC[path];
+      return new Response(body, { headers: { 'Content-Type': type, 'Cache-Control': 'public, max-age=86400' } });
+    }
+    if (path === '/favicon.ico') return Response.redirect(new URL('/icon.svg', url), 301);
     return new Response('Not found', { status: 404 });
   },
 };

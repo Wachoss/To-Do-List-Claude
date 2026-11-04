@@ -165,7 +165,7 @@ async function handleMessage(msg, env) {
       return rpcResult(msg.id, {
         protocolVersion: v,
         capabilities: { tools: { listChanged: false } },
-        serverInfo: { name: 'listas-ia', title: 'Listas de tareas', version: '1.0.0' },
+        serverInfo: { name: 'listas-ia', title: 'Apuntes', version: '1.0.0' },
         instructions: INSTRUCTIONS,
       });
     }

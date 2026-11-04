@@ -1,8 +1,8 @@
-# Listas IA
+# Apuntes
 
-Listas de tareas estilo Google Keep (listas con casillas) con:
+Listas de tareas (listas con casillas, como en Keep) con:
 
-- **Web** para verlas y editarlas (`https://<tu-worker>.workers.dev/`).
+- **App web pensada para el móvil** para verlas y editarlas (`https://<tu-worker>.workers.dev/`). Se puede instalar en la pantalla de inicio: en iPhone, Safari → Compartir → *Añadir a pantalla de inicio*; en Android, Chrome → menú → *Instalar app*. En pantallas anchas muestra el índice y la lista abierta lado a lado.
 - **Conector MCP** para que Claude (claude.ai, app móvil o escritorio) cree, lea y modifique tus listas.
 
 Funciona gratis en **Cloudflare Workers + D1** (base de datos SQLite gestionada).
@@ -73,5 +73,6 @@ npm run dev        # http://localhost:8787  ·  MCP en /mcp/token-de-prueba-loca
 - `src/index.js` — rutas: web (`/`), API REST (`/api/*`, con `Authorization: Bearer <token>`) y MCP (`/mcp/<token>`).
 - `src/mcp.js` — servidor MCP (transporte Streamable HTTP, sin estado).
 - `src/store.js` — acceso a la base de datos D1.
-- `src/ui.html` — la web.
+- `src/ui.html` — la web (una sola página, sin dependencias; tipografías Instrument Serif, Geist y Geist Mono de Google Fonts).
+- `src/assets/` — icono y manifiesto para instalarla como app.
 - `schema.sql` — tablas.
