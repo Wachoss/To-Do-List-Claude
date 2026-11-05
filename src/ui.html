@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=IBM+Plex+Mono:wght@400;600&family=Kalam:wght@400;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --paper: #f3eee3; --sheet: #fbf8f1; --ink: #1d1b16; --ink-2: #4a463c; --faint: #8b8473;
@@ -36,7 +36,7 @@
   }
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; background: var(--paper); color: var(--ink); }
+html, body { margin: 0; background: var(--desk, var(--paper)); color: var(--ink); }
 body { font: 16px/1.45 var(--sans); -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 input { font: inherit; color: inherit; background: transparent; border: 0; outline: none; padding: 0; min-width: 0; }
@@ -109,7 +109,7 @@ h1.mast em { color: var(--stamp); }
 .nolist { color: var(--faint); font: italic 26px/1.3 var(--serif); margin-top: 30vh; text-align: center; }
 
 /* ---------- barra de escritura inferior ---------- */
-.composer { position: sticky; bottom: 0; background: linear-gradient(to bottom, transparent, var(--paper) 16px);
+.composer { position: sticky; bottom: 0; background: linear-gradient(to bottom, transparent, var(--desk, var(--paper)) 16px);
   padding: 16px 16px calc(12px + var(--safe-b)); z-index: 3; }
 .composer-inner { display: flex; align-items: center; gap: 8px; background: var(--sheet); border: 1px solid var(--rule);
   border-radius: 14px; padding: 6px 6px 6px 16px; box-shadow: 0 6px 20px -12px rgba(40, 30, 10, .35); }
@@ -149,6 +149,137 @@ body.sheet-open .sheet { transform: none; }
 [data-c="purple"] { --tint: var(--t-purple); } [data-c="pink"] { --tint: var(--t-pink); } [data-c="brown"] { --tint: var(--t-brown); }
 [data-c="gray"] { --tint: var(--t-gray); }
 .row[data-c] .tab, .band[data-c], .sw[data-c] { background: var(--tint, var(--rule)); }
+
+/* ---------- elementos que solo usan algunas estéticas ---------- */
+.mini, .rfoot, .stamp, .leader { display: none; }
+.dl-actions { display: flex; gap: 4px; }
+
+/* =========================================================
+   ESTÉTICA «TICKET»: cada pantalla es un ticket de caja
+   ========================================================= */
+body[data-skin="ticket"] {
+  --desk: #cfcdc6; --paper: #fbfbf7; --sheet: #fbfbf7; --ink: #232323; --ink-2: #3a3a3a; --faint: #7a7a74;
+  --rule: #bdbab2; --rule-soft: #e4e2db; --stamp: #2a4fa0; --stamp-ink: #fbfbf7;
+  --serif: "IBM Plex Mono", ui-monospace, monospace; --sans: "IBM Plex Mono", ui-monospace, monospace; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { body[data-skin="ticket"] { --desk: #262522; } }
+body[data-skin="ticket"] { font-size: 14px; }
+body[data-skin="ticket"] .pane-body { padding: calc(var(--safe-t) + 14px) 12px 8px; }
+body[data-skin="ticket"] .paper { position: relative; background: var(--paper); color: var(--ink); padding: 18px 16px 34px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%; }
+body[data-skin="ticket"] .dateline { font-size: 11px; letter-spacing: .06em; }
+body[data-skin="ticket"] h1.mast { font: 600 22px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; text-align: center; margin: 18px 0 6px; }
+body[data-skin="ticket"] h1.mast em { color: inherit; font-style: normal; }
+body[data-skin="ticket"] .tally { text-align: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--ink); }
+body[data-skin="ticket"] .find { border-bottom: 1px dashed var(--rule); }
+body[data-skin="ticket"] .label { margin: 16px 0 4px; letter-spacing: .1em; }
+body[data-skin="ticket"] .row { grid-template-columns: 1fr auto; gap: 8px; padding: 7px 0; border: 0; align-items: start; }
+body[data-skin="ticket"] .row .tab, body[data-skin="ticket"] .ticks { display: none; }
+body[data-skin="ticket"] .row .name { font: 400 14px/1.3 var(--mono); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+body[data-skin="ticket"] .row .name::after { content: " ........................................................"; color: var(--faint); }
+body[data-skin="ticket"] .row .peek { font-size: 11px; white-space: normal; }
+body[data-skin="ticket"] .row .count { font-size: 14px; color: var(--ink); }
+body[data-skin="ticket"] .row[aria-current="true"] .name { color: var(--ink); font-weight: 600; }
+body[data-skin="ticket"] .rfoot { display: block; border-top: 1px dashed var(--ink); margin-top: 14px; padding-top: 10px; }
+body[data-skin="ticket"] .rfoot .tot { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; }
+body[data-skin="ticket"] .rfoot .tot.sm { font-weight: 400; font-size: 13px; }
+body[data-skin="ticket"] .rfoot .bar { height: 38px; margin: 16px 12% 6px; background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 3px, var(--ink) 3px 4px, transparent 4px 7px, var(--ink) 7px 10px, transparent 10px 11px); }
+body[data-skin="ticket"] .rfoot .thx { text-align: center; font-size: 11px; letter-spacing: .1em; }
+body[data-skin="ticket"] .listhead .iconbtn { color: var(--ink); }
+body[data-skin="ticket"] .band { display: none; }
+body[data-skin="ticket"] .ltitle { font: 600 24px/1.1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-align: center; }
+body[data-skin="ticket"] .lmeta { text-align: center; text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px dashed var(--ink); }
+body[data-skin="ticket"] .item { min-height: 40px; border: 0; gap: 4px; }
+body[data-skin="ticket"] .item input { font-size: 15px; text-transform: uppercase; padding: 8px 0; }
+body[data-skin="ticket"] .box { width: 40px; margin-left: -6px; }
+body[data-skin="ticket"] .box span, body[data-skin="ticket"] .item.done .box span { border: 0; background: none; width: auto; height: auto; font: 15px var(--mono); color: var(--ink); }
+body[data-skin="ticket"] .box span::before { content: "[ ]"; white-space: pre; }
+body[data-skin="ticket"] .item.done .box span::before { content: "[x]"; }
+body[data-skin="ticket"] .box svg { display: none; }
+body[data-skin="ticket"] .item.done input { text-decoration-color: var(--ink); }
+body[data-skin="ticket"] .donebar { border-top: 1px dashed var(--rule); margin-top: 8px; }
+body[data-skin="ticket"] .stamp { display: block; position: absolute; right: 18px; top: 74px; transform: rotate(-10deg); border: 2px solid var(--stamp);
+  color: var(--stamp); font: 600 15px var(--mono); letter-spacing: .14em; padding: 2px 8px; border-radius: 3px; opacity: .85; pointer-events: none; }
+body[data-skin="ticket"] .composer-inner { background: #232323; border-color: #232323; border-radius: 6px; color: #e9e7df; box-shadow: none; padding-left: 12px; }
+body[data-skin="ticket"] .composer-inner::before { content: ">"; color: #e9e7df; }
+body[data-skin="ticket"] .composer input { color: #e9e7df; font-size: 15px; }
+body[data-skin="ticket"] .composer input::placeholder { color: #9b9890; }
+body[data-skin="ticket"] .send, body[data-skin="ticket"] .send:disabled { background: transparent; color: #e9e7df; }
+body[data-skin="ticket"] .send:disabled { opacity: .4; }
+body[data-skin="ticket"] .sheet { border-radius: 4px 4px 0 0; }
+body[data-skin="ticket"] .nolist, body[data-skin="ticket"] .empty { font: 14px var(--mono); }
+
+/* =========================================================
+   ESTÉTICA «NEVERA»: notas adhesivas en la puerta
+   ========================================================= */
+body[data-skin="nevera"] {
+  --desk: #dfe6ea; --paper: #dfe6ea; --sheet: #fbfbf6; --ink: #2f3c45; --ink-2: #44525c; --faint: #6c7a84;
+  --rule: #c3ccd2; --rule-soft: #d2dade; --stamp: #2f3c45; --stamp-ink: #fff27a;
+  --serif: "Kalam", "Comic Sans MS", cursive; --sans: "Nunito", ui-rounded, system-ui, sans-serif; --mono: "Nunito", ui-rounded, system-ui, sans-serif;
+  --note-ink: #2a2a2a;
+}
+@media (prefers-color-scheme: dark) {
+  body[data-skin="nevera"] { --desk: #1c2328; --paper: #1c2328; --sheet: #263038; --ink: #e3e9ed; --ink-2: #c4ced5; --faint: #8e9ba4; --rule: #34404a; --rule-soft: #2b353d; }
+}
+body[data-skin="nevera"] [data-c] { --note: #fbfbf6; }
+body[data-skin="nevera"] [data-c="yellow"] { --note: #fff27a; } body[data-skin="nevera"] [data-c="red"] { --note: #ffb4a2; }
+body[data-skin="nevera"] [data-c="orange"] { --note: #ffcf8a; } body[data-skin="nevera"] [data-c="green"] { --note: #c8f1a6; }
+body[data-skin="nevera"] [data-c="teal"] { --note: #b5ead7; } body[data-skin="nevera"] [data-c="blue"] { --note: #a8dcff; }
+body[data-skin="nevera"] [data-c="purple"] { --note: #d9c4f5; } body[data-skin="nevera"] [data-c="pink"] { --note: #ffc2d1; }
+body[data-skin="nevera"] [data-c="brown"] { --note: #e6d3b3; } body[data-skin="nevera"] [data-c="gray"] { --note: #e4e4e0; }
+body[data-skin="nevera"] .dateline { font: 700 12px var(--sans); letter-spacing: .04em; text-transform: none; }
+body[data-skin="nevera"] h1.mast { font: 800 34px/1 var(--sans); margin: 14px 0 4px; }
+body[data-skin="nevera"] h1.mast em { color: inherit; font-style: normal; }
+body[data-skin="nevera"] .tally { font: 600 13px var(--sans); }
+body[data-skin="nevera"] .find { background: var(--sheet); border: 0; border-radius: 999px; padding: 10px 16px; margin-bottom: 4px; }
+body[data-skin="nevera"] #index { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px 14px; padding-top: 6px; }
+body[data-skin="nevera"] .label, body[data-skin="nevera"] .empty, body[data-skin="nevera"] #index > .peek { grid-column: 1 / -1; }
+body[data-skin="nevera"] .label { font: 800 12px var(--sans); letter-spacing: .06em; margin: 14px 0 0; }
+body[data-skin="nevera"] .row { display: block; position: relative; background: var(--note, #fbfbf6); color: var(--note-ink); border: 0; padding: 18px 12px 12px; min-height: 120px;
+  box-shadow: 0 8px 12px -8px rgba(0,0,0,.4); transform: rotate(var(--rot, -1deg)); transition: transform .15s; }
+body[data-skin="nevera"] .row:nth-of-type(3n+1) { --rot: -1.4deg; } body[data-skin="nevera"] .row:nth-of-type(3n+2) { --rot: 1.2deg; } body[data-skin="nevera"] .row:nth-of-type(3n) { --rot: -.5deg; }
+body[data-skin="nevera"] .row::before { content: ""; position: absolute; top: -8px; left: 50%; width: 48px; height: 15px; transform: translateX(-50%) rotate(-3deg);
+  background: rgba(255,255,255,.55); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+body[data-skin="nevera"] .row:active { transform: rotate(0) scale(.97); opacity: 1; }
+body[data-skin="nevera"] .row .tab, body[data-skin="nevera"] .row .peek, body[data-skin="nevera"] .ticks { display: none; }
+body[data-skin="nevera"] .row .name { font: 700 19px/1.1 var(--serif); white-space: normal; margin-bottom: 4px; }
+body[data-skin="nevera"] .row[aria-current="true"] .name { color: var(--note-ink); text-decoration: underline wavy rgba(0,0,0,.35); }
+body[data-skin="nevera"] .row .count { position: absolute; right: 10px; bottom: 8px; font: 700 11px var(--sans); color: rgba(0,0,0,.45); }
+body[data-skin="nevera"] .mini { display: block; font: 14px/1.25 var(--serif); }
+body[data-skin="nevera"] .mini .d { text-decoration: line-through; opacity: .5; }
+body[data-skin="nevera"] .mini .more { font: 700 11px var(--sans); opacity: .5; margin-top: 2px; }
+body[data-skin="nevera"] .band { display: none; }
+body[data-skin="nevera"] #listBody .paper { position: relative; background: var(--note, #fbfbf6); color: var(--note-ink); padding: 24px 18px 18px; margin-top: 10px;
+  transform: rotate(-.6deg); box-shadow: 0 12px 20px -12px rgba(0,0,0,.45); --ink: var(--note-ink); --ink-2: #3a3a3a; --faint: rgba(0,0,0,.5); --rule-soft: transparent; --rule: rgba(0,0,0,.15); }
+body[data-skin="nevera"] #listBody .paper::before { content: ""; position: absolute; top: -9px; left: 38%; width: 74px; height: 17px; background: rgba(255,255,255,.55); transform: rotate(2deg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+body[data-skin="nevera"] .ltitle { font: 700 36px/1.05 var(--serif); }
+body[data-skin="nevera"] .lmeta { font: 700 11px var(--sans); color: rgba(0,0,0,.5); margin: 4px 0 8px; }
+body[data-skin="nevera"] .item { min-height: 42px; border: 0; gap: 6px; }
+body[data-skin="nevera"] .item input { font: 19px/1.2 var(--serif); padding: 8px 0; }
+body[data-skin="nevera"] .box span { width: 19px; height: 19px; border: 2px solid var(--note-ink); border-radius: 45% 55% 50% 48%; background: none; }
+body[data-skin="nevera"] .item.done .box span { background: radial-gradient(var(--note-ink) 38%, transparent 41%); border-color: var(--note-ink); }
+body[data-skin="nevera"] .box svg { display: none; }
+body[data-skin="nevera"] .item.done input { color: rgba(0,0,0,.5); text-decoration-color: var(--note-ink); text-decoration-thickness: 2px; }
+body[data-skin="nevera"] .donebar { font: 800 11px var(--sans); color: rgba(0,0,0,.5); }
+body[data-skin="nevera"] .x { color: rgba(0,0,0,.45); }
+body[data-skin="nevera"] .composer-inner { border-radius: 999px; border: 0; padding-left: 20px; box-shadow: 0 6px 16px -8px rgba(0,0,0,.35); }
+body[data-skin="nevera"] .composer input { font-family: var(--sans); font-weight: 600; }
+body[data-skin="nevera"] .send { border-radius: 50%; background: var(--ink); color: var(--desk); }
+body[data-skin="nevera"] .send:disabled { background: var(--rule); color: var(--faint); }
+body[data-skin="nevera"] .nolist, body[data-skin="nevera"] .empty { font-family: var(--serif); font-style: normal; }
+
+/* ---------- selector de estética ---------- */
+.skins { display: grid; gap: 10px; }
+.skin { display: grid; grid-template-columns: 54px 1fr; gap: 14px; align-items: center; text-align: left; padding: 10px; border: 1.5px solid var(--rule); border-radius: 12px; }
+.skin[aria-pressed="true"] { border-color: var(--ink); }
+.skin b { display: block; font-size: 16px; }
+.skin small { color: var(--faint); font-size: 13px; line-height: 1.3; display: block; }
+.skin i { width: 54px; height: 54px; border-radius: 8px; display: grid; place-items: center; font-style: normal; }
+.skin .pv-cuaderno { background: #f3eee3; color: #d2452b; font: italic 26px "Instrument Serif", serif; }
+.skin .pv-ticket { background: #fbfbf7; color: #232323; font: 600 12px "IBM Plex Mono", monospace; border: 1px dashed #999; }
+.skin .pv-nevera { background: #fff27a; color: #2a2a2a; font: 700 20px "Kalam", cursive; transform: rotate(-3deg); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -159,8 +290,8 @@ body.sheet-open .sheet { transform: none; }
 <template id="appTpl">
   <div class="shell">
     <section class="pane" id="homePane">
-      <div class="pane-body">
-        <div class="dateline"><span id="today"></span><button id="archToggle"></button></div>
+      <div class="pane-body"><div class="paper">
+        <div class="dateline"><span id="today"></span><span class="dl-actions"><button id="skinBtn">Estilo</button><button id="archToggle"></button></span></div>
         <h1 class="mast">Apun<em>tes</em></h1>
         <div class="tally" id="tally"></div>
         <label class="find">
@@ -168,7 +299,8 @@ body.sheet-open .sheet { transform: none; }
           <input id="find" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search">
         </label>
         <div id="index"></div>
-      </div>
+        <div class="rfoot" id="rfoot"></div>
+      </div></div>
       <form class="composer" id="newForm">
         <div class="composer-inner">
           <input id="newInput" placeholder="Nueva lista…" autocomplete="off" enterkeyhint="go" maxlength="200">
@@ -199,6 +331,29 @@ body.sheet-open .sheet { transform: none; }
 const COLORS = ['default','red','orange','yellow','green','teal','blue','purple','pink','brown','gray'];
 const COLOR_NAMES = { default: 'Sin color', red: 'Teja', orange: 'Naranja', yellow: 'Mostaza', green: 'Oliva', teal: 'Verde agua',
   blue: 'Pizarra', purple: 'Lavanda', pink: 'Rosa', brown: 'Kraft', gray: 'Grafito' };
+const SKINS = [
+  { k: 'cuaderno', name: 'Cuaderno', desc: 'Papel cálido, letra de imprenta y sello rojo.', pv: 'Aa' },
+  { k: 'ticket', name: 'Ticket', desc: 'Cada lista es un ticket de caja.', pv: '[x]' },
+  { k: 'nevera', name: 'Nevera', desc: 'Notas adhesivas escritas a mano.', pv: 'Aa' },
+];
+function setSkin(k) {
+  if (!SKINS.some((s) => s.k === k)) k = 'cuaderno';
+  document.body.dataset.skin = k;
+  try { localStorage.setItem('apuntes_skin', k); } catch (e) {}
+  requestAnimationFrame(() => {
+    const bg = getComputedStyle(document.body).backgroundColor;
+    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', bg));
+  });
+}
+try { setSkin(localStorage.getItem('apuntes_skin') || 'cuaderno'); } catch (e) { setSkin('cuaderno'); }
+function openSkinSheet() {
+  $('sheet').replaceChildren(
+    h('div', { class: 'grip' }),
+    h('div', { class: 'label', style: 'margin-top:0;margin-bottom:12px' }, 'Estilo'),
+    h('div', { class: 'skins' }, SKINS.map((s) => h('button', { class: 'skin', 'aria-pressed': String(document.body.dataset.skin === s.k),
+      onclick: () => { setSkin(s.k); closeSheet(); } }, h('i', { class: 'pv-' + s.k }, s.pv), h('span', {}, h('b', {}, s.name), h('small', {}, s.desc))))));
+  document.body.classList.add('sheet-open');
+}
 const S = { lists: [], archived: false, current: null, showDone: false, query: '', confirmDelete: false };
 let token = '';
 try { token = localStorage.getItem('apuntes_token') || ''; } catch (e) {}
@@ -278,6 +433,7 @@ function mountApp() {
   $('root').replaceChildren($('appTpl').content.cloneNode(true));
   const d = new Intl.DateTimeFormat('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date());
   $('today').textContent = d.replace(/\./g, '');
+  $('skinBtn').onclick = openSkinSheet;
   $('archToggle').onclick = () => { S.archived = !S.archived; load(); };
   $('find').oninput = (e) => { S.query = e.target.value.trim().toLowerCase(); renderIndex(); };
   wireComposer('newForm', 'newInput', async (text) => {
@@ -339,10 +495,12 @@ function row(l) {
   const pending = l.items.filter((i) => !i.checked);
   const done = l.items.length - pending.length;
   const peek = pending.slice(0, 3).map((i) => i.text).join(' · ') || (l.items.length ? 'Todo hecho' : 'Vacía');
-  return h('button', { class: 'row', 'data-c': l.color !== 'default' ? l.color : null, 'aria-current': l.id === S.current ? 'true' : 'false',
+  return h('button', { class: 'row', 'data-c': l.color, 'aria-current': l.id === S.current ? 'true' : 'false',
     onclick: () => go(l.id) },
     h('span', { class: 'tab' }),
-    h('span', { style: 'min-width:0' }, h('div', { class: 'name' }, l.title), h('div', { class: 'peek' }, peek)),
+    h('span', { style: 'min-width:0' }, h('div', { class: 'name' }, l.title), h('div', { class: 'peek' }, peek),
+      h('div', { class: 'mini' }, [...pending, ...l.items.filter((i) => i.checked)].slice(0, 4).map((i) => h('div', { class: i.checked ? 'd' : '' }, i.text)),
+        l.items.length > 4 ? h('div', { class: 'more' }, '+' + (l.items.length - 4) + ' más') : null)),
     h('span', {}, h('div', { class: 'count' }, l.pinned ? h('span', { html: ICON.pin, style: 'margin-right:6px' }) : null,
       l.items.length ? done + '/' + l.items.length : '—'), ticks({ ...l, total_items: l.items.length, checked_items: done })));
 }
@@ -362,6 +520,9 @@ function renderIndex() {
   if (S.archived) parts.push(h('div', { class: 'label' }, 'Archivo'), archived.length ? archived.map(row) : h('div', { class: 'peek' }, 'Nada archivado.'));
   if (!active.length && !S.archived) parts.push(h('div', { class: 'empty' }, S.query ? 'Nada coincide.' : 'Nada apuntado todavía. Escribe abajo, o pídeselo a Claude.'));
   idx.replaceChildren(...parts.flat().filter(Boolean));
+  $('rfoot').replaceChildren(h('div', { class: 'tot' }, h('span', {}, 'PENDIENTE'), h('span', {}, open)),
+    h('div', { class: 'tot sm' }, h('span', {}, 'LISTAS'), h('span', {}, nLists)),
+    h('div', { class: 'bar', 'aria-hidden': 'true' }), h('div', { class: 'thx' }, 'GRACIAS POR APUNTAR'));
 }
 
 /* ---------- lista ---------- */
@@ -417,6 +578,8 @@ function renderList() {
       h('button', { class: 'iconbtn back', 'aria-label': 'Volver', html: ICON.back, onclick: () => go(null) }),
       h('span'),
       h('button', { class: 'iconbtn', 'aria-label': 'Opciones', html: ICON.more, onclick: openSheet })),
+    h('div', { class: 'paper', 'data-c': l.color !== 'default' ? l.color : 'default' },
+    l.items.length && !pending.length ? h('div', { class: 'stamp', 'aria-hidden': 'true' }, 'HECHO') : null,
     h('div', { class: 'band', 'data-c': l.color !== 'default' ? l.color : null }),
     title,
     h('div', { class: 'lmeta' }, meta),
@@ -424,7 +587,9 @@ function renderList() {
     done.length ? h('button', { class: 'donebar', 'aria-expanded': String(S.showDone), onclick: () => { S.showDone = !S.showDone; renderList(); } },
       h('span', {}, h('span', { class: 'chev' }, '›'), ' Hecho · ' + done.length), h('span', {}, S.showDone ? 'Ocultar' : 'Ver')) : null,
     done.length && S.showDone ? h('ul', { class: 'items' }, done.map((it) => itemEl(l, it))) : null,
-    !l.items.length ? h('div', { class: 'empty', style: 'text-align:left;padding:20px 0' }, 'Lista vacía. Escribe abajo lo primero.') : null].filter(Boolean));
+    !l.items.length ? h('div', { class: 'empty', style: 'text-align:left;padding:20px 0' }, 'Lista vacía. Escribe abajo lo primero.') : null,
+    l.items.length ? h('div', { class: 'rfoot' }, h('div', { class: 'tot' }, h('span', {}, 'POR HACER'), h('span', {}, pending.length)),
+      h('div', { class: 'tot sm' }, h('span', {}, 'HECHO'), h('span', {}, done.length)), h('div', { class: 'bar', 'aria-hidden': 'true' })) : null)]);
 }
 function scrollToEnd() {
   const pane = $('listPane');

@@ -73,6 +73,6 @@ npm run dev        # http://localhost:8787  ·  MCP en /mcp/token-de-prueba-loca
 - `src/index.js` — rutas: web (`/`), API REST (`/api/*`, con `Authorization: Bearer <token>`) y MCP (`/mcp/<token>`).
 - `src/mcp.js` — servidor MCP (transporte Streamable HTTP, sin estado).
 - `src/store.js` — acceso a la base de datos D1.
-- `src/ui.html` — la web (una sola página, sin dependencias; tipografías Instrument Serif, Geist y Geist Mono de Google Fonts).
+- `src/ui.html` — la web (una sola página, sin dependencias). Tiene tres estilos que se eligen con el botón «Estilo»: Cuaderno, Ticket y Nevera. La elección se guarda en cada dispositivo.
 - `src/assets/` — icono y manifiesto para instalarla como app.
 - `schema.sql` — tablas.
