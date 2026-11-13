@@ -85,6 +85,20 @@ async function handleApi(request, env, path) {
   }
 }
 
+// Crea las tablas la primera vez que arranca el Worker (así no hace falta ningún paso manual).
+const SCHEMA = [
+  `CREATE TABLE IF NOT EXISTS lists (id TEXT PRIMARY KEY, title TEXT NOT NULL, color TEXT NOT NULL DEFAULT 'default',
+    pinned INTEGER NOT NULL DEFAULT 0, archived INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS items (id TEXT PRIMARY KEY, list_id TEXT NOT NULL REFERENCES lists(id) ON DELETE CASCADE,
+    text TEXT NOT NULL, checked INTEGER NOT NULL DEFAULT 0, position INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`,
+  'CREATE INDEX IF NOT EXISTS idx_items_list ON items(list_id, position)',
+];
+let schemaReady = null;
+function ensureSchema(db) {
+  schemaReady ||= db.batch(SCHEMA.map((q) => db.prepare(q))).catch((e) => { schemaReady = null; throw e; });
+  return schemaReady;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -96,6 +110,8 @@ export default {
         { status: 500 }
       );
     }
+
+    if (path.startsWith('/mcp/') || path.startsWith('/api/')) await ensureSchema(env.DB);
 
     if (path.startsWith('/mcp/')) {
       if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });

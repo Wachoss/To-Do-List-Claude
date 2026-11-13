@@ -28,8 +28,8 @@ Las listas se pueden indicar por su título ("añade leche a la compra").
 Necesitas Node.js 18+ y una cuenta gratuita de Cloudflare.
 
 ```bash
-git clone https://github.com/<tu-usuario>/listas-ia.git
-cd listas-ia
+git clone https://github.com/Wachoss/To-Do-List-Claude.git
+cd To-Do-List-Claude
 npm install
 npx wrangler login                      # abre el navegador para entrar en Cloudflare
 npx wrangler d1 create listas-ia        # copia el "database_id" que aparece
@@ -38,7 +38,6 @@ npx wrangler d1 create listas-ia        # copia el "database_id" que aparece
 Pega ese `database_id` en `wrangler.toml` (sustituye `REEMPLAZAR_CON_EL_ID_DE_TU_BASE_D1`). Después:
 
 ```bash
-npm run db:init                         # crea las tablas
 npx wrangler secret put ACCESS_TOKEN    # pega un token largo y secreto (ver abajo)
 npm run deploy                          # te da la URL https://listas-ia.<tu-subdominio>.workers.dev
 ```
@@ -64,7 +63,6 @@ El conector queda disponible también en la app móvil y de escritorio con la mi
 
 ```bash
 echo 'ACCESS_TOKEN="token-de-prueba-local"' > .dev.vars
-npm run db:init:local
 npm run dev        # http://localhost:8787  ·  MCP en /mcp/token-de-prueba-local
 ```
 
