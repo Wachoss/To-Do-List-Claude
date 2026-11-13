@@ -23,27 +23,26 @@ Funciona gratis en **Cloudflare Workers + D1** (base de datos SQLite gestionada)
 
 Las listas se pueden indicar por su título ("añade leche a la compra").
 
-## Desplegar (una sola vez, ~10 minutos)
+## Desplegar (una sola vez, sin terminal)
 
-Necesitas Node.js 18+ y una cuenta gratuita de Cloudflare.
+Necesitas una cuenta gratuita de Cloudflare. La base de datos se crea sola en el primer despliegue y las tablas en la primera visita.
+
+1. En el [panel de Cloudflare](https://dash.cloudflare.com) ve a **Compute (Workers) → Workers & Pages → Create → Import a repository**.
+2. Conecta tu cuenta de GitHub, elige `To-Do-List-Claude` y pulsa **Deploy** sin cambiar nada (el comando de despliegue por defecto, `npx wrangler deploy`, sirve).
+3. Cuando termine, entra en el Worker **listas-ia → Settings → Variables and Secrets → Add**: tipo **Secret**, nombre `ACCESS_TOKEN`, y como valor una contraseña larga inventada (mínimo 16 caracteres; mejor 30 o más). Guárdala: es la contraseña de la web y va dentro de la URL del conector.
+4. Tu app queda en `https://listas-ia.<tu-subdominio>.workers.dev` (la URL aparece en la página del Worker).
+
+Cada vez que se suba un cambio a `main` en GitHub, Cloudflare vuelve a desplegar solo.
+
+### Alternativa con terminal
 
 ```bash
-git clone https://github.com/Wachoss/To-Do-List-Claude.git
-cd To-Do-List-Claude
+git clone https://github.com/Wachoss/To-Do-List-Claude.git && cd To-Do-List-Claude
 npm install
-npx wrangler login                      # abre el navegador para entrar en Cloudflare
-npx wrangler d1 create listas-ia        # copia el "database_id" que aparece
+npx wrangler login
+npx wrangler secret put ACCESS_TOKEN    # pega tu contraseña larga
+npm run deploy                          # crea la base de datos y publica el Worker
 ```
-
-Pega ese `database_id` en `wrangler.toml` (sustituye `REEMPLAZAR_CON_EL_ID_DE_TU_BASE_D1`). Después:
-
-```bash
-npx wrangler secret put ACCESS_TOKEN    # pega un token largo y secreto (ver abajo)
-npm run deploy                          # te da la URL https://listas-ia.<tu-subdominio>.workers.dev
-```
-
-Para generar un token aleatorio: `node -e "console.log(crypto.randomUUID()+crypto.randomUUID())"`.
-Guárdalo: es la contraseña de la web y forma parte de la URL del conector.
 
 ## Conectar Claude
 
