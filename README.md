@@ -29,7 +29,7 @@ Necesitas una cuenta gratuita de Cloudflare. La base de datos se crea sola en el
 
 1. En el [panel de Cloudflare](https://dash.cloudflare.com) ve a **Compute (Workers) → Workers & Pages → Create → Import a repository**.
 2. Conecta tu cuenta de GitHub, elige `To-Do-List-Claude` y pulsa **Deploy** sin cambiar nada (el comando de despliegue por defecto, `npx wrangler deploy`, sirve).
-3. Cuando termine, entra en el Worker **listas-ia → Settings → Variables and Secrets → Add**: tipo **Secret**, nombre `ACCESS_TOKEN`, y como valor una contraseña larga inventada (mínimo 16 caracteres; mejor 30 o más). Guárdala: es la contraseña de la web y va dentro de la URL del conector.
+3. Cuando termine, entra en el Worker **listas-ia → Settings → Variables and Secrets → Add**: tipo **Secret**, nombre `ACCESS_TOKEN`, y como valor una contraseña larga inventada, solo con letras y números (mínimo 16 caracteres; mejor 30 o más). Guárdala: es la contraseña de la web y va dentro de la URL del conector.
 4. Tu app queda en `https://listas-ia.<tu-subdominio>.workers.dev` (la URL aparece en la página del Worker).
 
 Cada vez que se suba un cambio a `main` en GitHub, Cloudflare vuelve a desplegar solo.
